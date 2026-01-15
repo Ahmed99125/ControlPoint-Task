@@ -1,10 +1,13 @@
 package com.controlpoint.ottwin.controller;
 
+import com.controlpoint.ottwin.dto.AssetDTO;
+import com.controlpoint.ottwin.dto.SensorReadingDTO;
 import com.controlpoint.ottwin.model.Asset;
 import com.controlpoint.ottwin.model.SensorReading;
 import com.controlpoint.ottwin.service.AssetService;
 import com.controlpoint.ottwin.service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,23 +27,27 @@ public class AssetController {
     }
 
     @PostMapping
-    public Asset createAsset(@RequestBody Asset asset) {
-        asset.setId(null);
-        return assetService.saveAsset(asset);
+    public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDTO) {
+        assetDTO = assetService.saveAsset(assetDTO);
+        return ResponseEntity.ok(assetDTO);
     }
 
     @GetMapping
-    public List<Asset> getAllAssets() {
-        return assetService.getAllAssets();
+    public ResponseEntity<List<AssetDTO>> getAllAssets() {
+        return ResponseEntity.ok(assetService.getAllAssets());
     }
     
     @GetMapping("/{id}")
-    public Optional<Asset> getAssetById(@PathVariable long id) {
-        return assetService.getAssetById(id);
+    public ResponseEntity<AssetDTO> getAssetById(@PathVariable long id) {
+        return assetService.getAssetById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/readings/latest")
-    public Optional<SensorReading> getLatestReading(@PathVariable long id) {
-        return  sensorService.getLatestReading(id);
+    public ResponseEntity<SensorReadingDTO> getLatestReading(@PathVariable long id) {
+        return  sensorService.getLatestReading(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
     }
 }

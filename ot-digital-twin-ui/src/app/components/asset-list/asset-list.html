@@ -1,0 +1,57 @@
+<div class="container mt-5">
+  <ng-container *ngIf="assets$ | async as assets">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Factory Assets Dashboard</h2>
+      <span class="badge bg-light text-dark border">System Online</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-hover border">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Asset Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let asset of assets">
+            <td>{{ asset.id }}</td>
+            <td>{{ asset.name }}</td>
+            <td>{{ asset.type }}</td>
+            <td>
+              <span class="badge" 
+                    [ngClass]="{
+                      'bg-success': asset.status === 'RUNNING', 
+                      'bg-danger': asset.status === 'STOPPED',
+                      'bg-warning text-dark': asset.status === 'ALARM'
+                    }">
+                {{ asset.status }}
+              </span>
+            </td>
+            <td>
+              <a [routerLink]="['/assets', asset.id]" class="btn btn-primary btn-sm">
+                View Details
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div *ngIf="assets.length === 0" class="alert alert-secondary text-center">
+      No assets found. Database might be empty.
+    </div>
+
+  </ng-container>
+
+  <div *ngIf="(assets$ | async) === null" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+</div>

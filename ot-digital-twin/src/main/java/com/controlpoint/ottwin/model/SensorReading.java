@@ -1,6 +1,7 @@
 package com.controlpoint.ottwin.model;
 
 import jakarta.persistence.*;
+import jdk.jfr.Timestamp;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
