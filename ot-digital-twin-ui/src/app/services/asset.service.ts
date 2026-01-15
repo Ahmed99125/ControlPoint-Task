@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, forkJoin, map, switchMap, tap } from 'rxjs';
-import { Asset, SensorReading } from '../models/asset';
+import { Asset, SensorReading } from '../models/asset'; 
+import { environment } from '../../environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AssetService {
-  private apiUrl = 'http://localhost:8080/api/assets';
+  private apiUrl = `${environment.apiUrl}/assets`;
 
   private assetsSubject = new BehaviorSubject<Asset[]>([]);
   

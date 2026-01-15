@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { AssetService } from '../../services/asset';
+import { AssetService } from '../../services/asset.service';
 import { Asset } from '../../models/asset';
 import { Observable } from 'rxjs';
 

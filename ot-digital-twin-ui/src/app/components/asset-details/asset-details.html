@@ -1,59 +1,69 @@
-<div class="container mt-4">
-  <a routerLink="/" class="btn btn-outline-secondary mb-4">&larr; Back to List</a>
+<div class="container">
+  <a routerLink="/" class="back-button">
+    <span class="back-arrow">←</span> Back to List
+  </a>
 
   <div *ngIf="asset$ | async as asset; else loading">
     
-    <div class="card mb-4">
-      <div class="card-header">Asset Information</div>
+    <div class="asset-info-card">
+      <div class="card-header">
+        <h2>{{ asset.name }}</h2>
+        <span class="status-badge"
+              [ngClass]="{
+                'status-running': asset.status === 'RUNNING', 
+                'status-stopped': asset.status === 'STOPPED',
+                'status-alarm': asset.status === 'ALARM',
+                'status-maintenance': asset.status === 'MAINTENANCE'
+              }">
+          {{ asset.status }}
+        </span>
+      </div>
       <div class="card-body">
-        <h3 class="card-title">{{ asset.name }}</h3>
-        <p class="card-text">
-          <strong>Type:</strong> {{ asset.type }} <br>
-          <strong>Status:</strong> 
-          <span class="badge" 
-                [ngClass]="{
-                  'bg-success': asset.status === 'RUNNING', 
-                  'bg-danger': asset.status === 'STOPPED',
-                  'bg-warning text-dark': asset.status === 'ALARM'
-                }">
-            {{ asset.status }}
-          </span>
-        </p>
+        <div class="info-row">
+          <span class="info-label">Asset Type</span>
+          <span class="info-value">{{ asset.type }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Asset ID</span>
+          <span class="info-value">{{ asset.id }}</span>
+        </div>
       </div>
     </div>
 
     <div *ngIf="asset.lastReading; else noReading">
-      <div class="card">
-        <div class="card-header">Latest Sensor Reading</div>
-        <div class="card-body">
-          <div class="row text-center">
-            <div class="col-md-6 mb-3">
-              <div class="p-3 border rounded bg-light">
-                <h5 class="text-muted">Temperature</h5>
-                <h2 class="display-6">{{ asset.lastReading.temperature | number:'1.1-1' }} °C</h2>
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <div class="p-3 border rounded bg-light">
-                <h5 class="text-muted">Pressure</h5>
-                <h2 class="display-6">{{ asset.lastReading.pressure | number:'1.1-1' }} PSI</h2>
-              </div>
-            </div>
+      <div class="sensor-card">
+        <div class="sensor-header">Latest Sensor Reading</div>
+        <div class="sensor-grid">
+          <div class="sensor-box temperature">
+            <div class="sensor-label">Temperature</div>
+            <div class="sensor-value">{{ asset.lastReading.temperature | number:'1.1-1' }}</div>
+            <div class="sensor-unit">°C</div>
           </div>
-          <div class="mt-3 text-muted">
-            <strong>Timestamp:</strong> {{ asset.lastReading.timestamp }}
+          <div class="sensor-box pressure">
+            <div class="sensor-label">Pressure</div>
+            <div class="sensor-value">{{ asset.lastReading.pressure | number:'1.1-1' }}</div>
+            <div class="sensor-unit">PSI</div>
           </div>
+        </div>
+        <div class="timestamp">
+          <span class="timestamp-label">Last Updated:</span>
+          <span class="timestamp-value">{{ asset.lastReading.timestamp }}</span>
         </div>
       </div>
     </div>
     
     <ng-template #noReading>
-      <div class="alert alert-warning">Waiting for sensor data...</div>
+      <div class="no-data">
+        <div class="no-data-text">Waiting for sensor data...</div>
+      </div>
     </ng-template>
 
   </div>
 
   <ng-template #loading>
-    <div class="alert alert-info">Loading Asset Data...</div>
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading Asset Data...</div>
+    </div>
   </ng-template>
 </div>
